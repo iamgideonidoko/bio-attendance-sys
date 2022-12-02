@@ -1,11 +1,12 @@
 // import FingerprintSigninControl from './lib/fingerprint';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import WithMainLayout from './lib/WithMainLayout';
+import WithMainLayout from './layouts/WithMainLayout';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminRegister from './pages/admin/AdminRegister';
 import StaffLogin from './pages/staff/StaffLogin';
+import AdminProfile from './pages/admin/AdminProfile';
 
 function App() {
   const router = createBrowserRouter([
@@ -25,6 +26,10 @@ function App() {
     {
       path: '/staff/login',
       element: <StaffLogin />,
+    },
+    {
+      path: '/admin/profile',
+      element: <AdminProfile />,
     },
   ]);
 
