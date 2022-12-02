@@ -1,0 +1,29 @@
+diff --git a/node_modules/@digitalpersona/devices/@types/WebSdk/index.js b/node_modules/@digitalpersona/devices/@types/WebSdk/index.js
+index 912db7d..82c6155 100644
+--- a/node_modules/@digitalpersona/devices/@types/WebSdk/index.js
++++ b/node_modules/@digitalpersona/devices/@types/WebSdk/index.js
+@@ -4673,9 +4673,8 @@
+ 
+             // To prevent null byte termination bug
+             if (hex.length % 2 != 0) hex = '0' + hex;
+-
+-            i = 0;
+-            ascii = '';
++            var i = 0;
++            var ascii = '';
+ 
+             while (i < hex.length / 2) {
+                 ascii = ascii + String.fromCharCode(
+diff --git a/node_modules/@digitalpersona/devices/src/devices/websdk/channel.ts b/node_modules/@digitalpersona/devices/src/devices/websdk/channel.ts
+index 0c79a82..2f21bb2 100644
+--- a/node_modules/@digitalpersona/devices/src/devices/websdk/channel.ts
++++ b/node_modules/@digitalpersona/devices/src/devices/websdk/channel.ts
+@@ -1,7 +1,7 @@
+ import { Base64Url, Utf8 } from '@digitalpersona/core';
+ import { Request, Response } from './command';
+ import { MessageType, Message } from './messages';
+-import 'WebSdk';
++// import 'WebSdk';
+ 
+ /**@internal
+  *

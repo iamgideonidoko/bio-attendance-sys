@@ -1,0 +1,17 @@
+[
+    {
+        "Data": "AOhKAcgp43NcwEE381aKq91cZ2YP4QR-tWG4KHaTsJ9-FNeph5eNCSRzEqTYk_ayTnxMDGNWz_Y0B3IjwS47fxe0O22bsThxsT5am999Q-gBu3ucFsVCePkdcGujI2J75Srcn_GRum-rH-a1qCvcUH0MmGG_Fxoleq73NC6B_yVJmTktXS8OdQJM0idh4UAqUCv1S-h6JOJ4jb9i4u64h5XUqng1We9dQPRYWVu-ZkjB6U2-mYM2LHW5vhhh0HIhBUbbNSA7UgJeXuv_b79NDGHzuQK65xb63mpzKzzi_PdiT92NGIKRrgjgIVQ02CUHHS_g0QpIZwMK1owTPFEjz2FBPVCxW_YghoI7vZwb_Y_WrDrN1VaurUTPbvdne2ZPT8gnX2kno9JN87bYkuD8U-KWgCZWYIc35sNIca7iBc5-GBejJ3AP_stxH-jSPW8",
+        "Header": {
+            "Encryption": 0,
+            "Factor": 8,
+            "Format": {
+                "FormatID": 0,
+                "FormatOwner": 51
+            },
+            "Purpose": 0,
+            "Quality": -1,
+            "Type": 2
+        },
+        "Version": 1
+    }
+]
