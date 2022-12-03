@@ -1,0 +1,81 @@
+// Prisma Schema
+// Documentation: https://pris.ly/d/prisma-schema
+
+// GENERATORS
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output = "./diagrams/ERD-auto.svg"
+}
+
+generator joi {
+  provider = "prisma-joi-generator"
+  output = "./joi"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DB_CONNECTION_URL")
+}
+
+// MODELS
+model Staff {
+  id         String     @id @default(uuid())
+  name       String
+  email      String     @unique
+  password   String
+  created_at DateTime
+  course     Course[]
+}
+
+model Student {
+  id          String              @id @default(uuid())
+  name        String
+  matric_no   String              @unique
+  fingerprint String
+  created_at  DateTime
+  course      StudentCourse[]
+  attendance  StudentAttendance[]
+}
+
+model Course {
+  id           String          @id @default(uuid())
+  staff_id     String
+  course_name  String
+  course_code  String          @unique
+  created_at   DateTime
+  attendance   Attendance[]
+  student      StudentCourse[]
+  staff        Staff           @relation(fields: [staff_id], references: [id])
+}
+
+model Attendance {
+  id           String               @id @default(uuid())
+  name         String
+  created_at   DateTime
+  Date         String
+  course_id    String
+  course       Course               @relation(fields: [course_id], references: [id])
+  student      StudentAttendance[]
+}
+
+model StudentCourse {
+  student    Student @relation(fields: [student_id], references: [id])
+  student_id String
+  course     Course  @relation(fields: [course_id], references: [id])
+  course_id  String
+
+  @@id([student_id, course_id])
+}
+
+model StudentAttendance {
+  student        Student     @relation(fields: [student_id], references: [id])
+  student_id     String
+  attendance     Attendance  @relation(fields: [attendance_id], references: [id])
+  attendance_id  String
+
+  @@id([student_id, attendance_id])
+}
