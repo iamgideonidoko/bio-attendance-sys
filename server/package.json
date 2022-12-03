@@ -4,7 +4,18 @@
   "description": "Backend for fingerprint biometric attendance system",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server:dev": "cross-env NODE_ENV=development nodemon",
+    "server:test": "cross-env NODE_ENV=test nodemon",
+    "server:prod": "cross-env NODE_ENV=production nodemon",
+    "server:docs": "prisma-docs-generator serve",
+    "start": "node index.js",
+    "build": "tsc",
+    "lint:check": "eslint ./**/*.{js,jsx,ts,tsx} --max-warnings=0",
+    "lint:fix": "eslint ./**/*.{js,jsx,ts,tsx} --fix",
+    "studio": "prisma studio",
+    "seed": "prisma db seed",
+    "migrate:dev": "prisma migrate dev"
   },
   "author": "Gideon Idoko <iamgideonidoko@gmail.com>",
   "license": "MIT",
