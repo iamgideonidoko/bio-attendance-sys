@@ -21,6 +21,9 @@ const WithAdminLayout: FC<{ children: ReactNode }> = ({ children }) => {
             <MenuItem as={RouterLink} to="/admin/manage/courses">
               Manage Courses
             </MenuItem>
+            <MenuItem as={RouterLink} to="/admin/manage/classes">
+              Manage Classes
+            </MenuItem>
             <MenuItem as={RouterLink} to="/admin/settings">
               Settings
             </MenuItem>

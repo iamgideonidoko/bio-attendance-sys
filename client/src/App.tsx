@@ -11,6 +11,7 @@ import AdminManageCourses from './pages/admin/AdminManageCourses';
 import AdminManageStaff from './pages/admin/AdminManageStaff';
 import AdminManageStudents from './pages/admin/AdminManageStudents';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminManageClasses from './pages/admin/AdminManageClasses';
 
 function App() {
   const router = createBrowserRouter([
@@ -38,6 +39,10 @@ function App() {
     {
       path: '/admin/manage/courses',
       element: <AdminManageCourses />,
+    },
+    {
+      path: '/admin/manage/classes',
+      element: <AdminManageClasses />,
     },
     {
       path: '/admin/manage/staff',

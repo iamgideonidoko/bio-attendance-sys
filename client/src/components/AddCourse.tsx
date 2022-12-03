@@ -12,30 +12,22 @@ import {
   Button,
 } from '@chakra-ui/react';
 
-const AddStaff: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ onClose, isOpen, size }) => {
+const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ onClose, isOpen, size }) => {
   return (
     <Drawer onClose={onClose} isOpen={isOpen} size={size}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        <DrawerHeader>Add New Staff</DrawerHeader>
+        <DrawerHeader>Add New Course</DrawerHeader>
         <DrawerBody>
           <form className="login-form" method="post" action="#">
             <FormControl>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Course Title</FormLabel>
               <Input type="text" />
             </FormControl>
             <FormControl marginTop="1rem">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" />
-            </FormControl>
-            <FormControl marginTop="1rem">
-              <FormLabel>Password</FormLabel>
-              <Input type="password" />
-            </FormControl>
-            <FormControl marginTop="1rem">
-              <FormLabel>Confirm Password</FormLabel>
-              <Input type="password" />
+              <FormLabel>Course Code</FormLabel>
+              <Input type="text" />
             </FormControl>
             <Button
               w="100%"
@@ -45,7 +37,7 @@ const AddStaff: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ 
               marginTop="2rem"
               _hover={{ background: 'var(--bg-primary-light)' }}
             >
-              Add staff
+              Add course
             </Button>
           </form>
         </DrawerBody>
@@ -54,4 +46,4 @@ const AddStaff: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ 
   );
 };
 
-export default AddStaff;
+export default AddCourse;
