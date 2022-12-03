@@ -12,13 +12,13 @@ const WithAdminLayout: FC<{ children: ReactNode }> = ({ children }) => {
             <MenuItem as={RouterLink} to="/admin/profile">
               Profile
             </MenuItem>
-            <MenuItem as={RouterLink} to="/admin/manage-staff">
+            <MenuItem as={RouterLink} to="/admin/manage/staff">
               Manage Staff
             </MenuItem>
-            <MenuItem as={RouterLink} to="/admin/manage-students">
+            <MenuItem as={RouterLink} to="/admin/manage/students">
               Manage Students
             </MenuItem>
-            <MenuItem as={RouterLink} to="/admin/manage-courses">
+            <MenuItem as={RouterLink} to="/admin/manage/courses">
               Manage Courses
             </MenuItem>
             <MenuItem as={RouterLink} to="/admin/settings">

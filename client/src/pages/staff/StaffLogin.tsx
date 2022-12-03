@@ -5,7 +5,7 @@ const StaffLogin: FC = () => {
   return (
     <div>
       <Heading as="h2" fontSize="1.8rem" margin="2rem auto" textAlign="center">
-        ADMIN LOGIN
+        STAFF LOGIN
       </Heading>
       <Card maxW={400} margin="1rem auto">
         <CardHeader fontWeight={600} fontSize="1.7rem" textAlign="center">

@@ -10,6 +10,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.13",
     "@chakra-ui/react": "^2.4.2",
     "@digitalpersona/devices": "^0.2.6",
     "@emotion/react": "^11.10.5",
