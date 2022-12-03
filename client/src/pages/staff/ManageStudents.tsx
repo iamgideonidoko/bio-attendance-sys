@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FC } from 'react';
-import WithAdminLayout from '../../layouts/WithAdminLayout';
+import WithStaffLayout from '../../layouts/WithStaffLayout';
 import {
   Heading,
   Flex,
@@ -14,55 +14,55 @@ import {
   TableCaption,
   TableContainer,
 } from '@chakra-ui/react';
-import AddCourse from '../../components/AddCourse';
+import AddStudent from '../../components/AddStudent';
 import { PlusSquareIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 
-const AdminManageCourses: FC = () => {
+const ManageStudents: FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   return (
-    <WithAdminLayout>
+    <WithStaffLayout>
       <Flex justifyContent="space-between" alignItems="center" marginTop="2rem">
         <Heading fontSize={25} fontWeight={600}>
-          Manage Course
+          Manage Students
         </Heading>
         <IconButton
           bg="var(--bg-primary)"
           color="white"
-          aria-label="Add course"
+          aria-label="Add staff"
           icon={<PlusSquareIcon fontSize={20} onClick={() => setDrawerOpen(true)} />}
         />
       </Flex>
 
       <TableContainer marginTop={10}>
         <Table variant="simple">
-          <TableCaption>All Courses</TableCaption>
+          <TableCaption>All Staff</TableCaption>
           <Thead>
             <Tr>
               <Th>S/N</Th>
-              <Th>Course Title</Th>
-              <Th>Course Name</Th>
+              <Th>Name</Th>
+              <Th>Matric Number</Th>
               <Th>Action</Th>
             </Tr>
           </Thead>
           <Tbody>
             <Tr>
               <Td>1</Td>
-              <Td>Hacking</Td>
-              <Td>HAC101</Td>
+              <Td>James Peter</Td>
+              <Td>james@peter.com</Td>
               <Td>
                 <Flex justifyContent="flex-start" gap={4} alignItems="center">
                   <IconButton
                     bg="transparent"
                     _hover={{ color: 'white', background: 'var(--bg-primary)' }}
                     color="var(--bg-primary)"
-                    aria-label="Edit course"
+                    aria-label="Edit staff"
                     icon={<EditIcon />}
                   />
                   <IconButton
                     bg="white"
                     color="#d10d0d"
                     _hover={{ color: 'white', background: '#d10d0d' }}
-                    aria-label="Delete course"
+                    aria-label="Delete staff"
                     icon={<DeleteIcon />}
                   />
                 </Flex>
@@ -70,22 +70,22 @@ const AdminManageCourses: FC = () => {
             </Tr>
             <Tr>
               <Td>2</Td>
-              <Td>CRACKING</Td>
-              <Td>CRK101</Td>
+              <Td>James Peter</Td>
+              <Td>SCI19CSC232</Td>
               <Td>
                 <Flex justifyContent="flex-start" gap={4} alignItems="center">
                   <IconButton
                     bg="transparent"
                     _hover={{ color: 'white', background: 'var(--bg-primary)' }}
                     color="var(--bg-primary)"
-                    aria-label="Edit course"
+                    aria-label="Edit staff"
                     icon={<EditIcon />}
                   />
                   <IconButton
                     bg="white"
                     color="#d10d0d"
                     _hover={{ color: 'white', background: '#d10d0d' }}
-                    aria-label="Delete course"
+                    aria-label="Delete staff"
                     icon={<DeleteIcon />}
                   />
                 </Flex>
@@ -93,22 +93,22 @@ const AdminManageCourses: FC = () => {
             </Tr>
             <Tr>
               <Td>3</Td>
-              <Td>PHISING</Td>
-              <Td>PHI101</Td>
+              <Td>James Peter</Td>
+              <Td>james@peter.com</Td>
               <Td>
                 <Flex justifyContent="flex-start" gap={4} alignItems="center">
                   <IconButton
                     bg="transparent"
                     _hover={{ color: 'white', background: 'var(--bg-primary)' }}
                     color="var(--bg-primary)"
-                    aria-label="Edit course"
+                    aria-label="Edit staff"
                     icon={<EditIcon />}
                   />
                   <IconButton
                     bg="white"
                     color="#d10d0d"
                     _hover={{ color: 'white', background: '#d10d0d' }}
-                    aria-label="Delete course"
+                    aria-label="Delete staff"
                     icon={<DeleteIcon />}
                   />
                 </Flex>
@@ -118,9 +118,9 @@ const AdminManageCourses: FC = () => {
         </Table>
       </TableContainer>
 
-      <AddCourse isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} size="md" />
-    </WithAdminLayout>
+      <AddStudent isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} size="md" />
+    </WithStaffLayout>
   );
 };
 
-export default AdminManageCourses;
+export default ManageStudents;

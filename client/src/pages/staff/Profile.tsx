@@ -1,11 +1,11 @@
 import type { FC } from 'react';
-import WithAdminLayout from '../../layouts/WithAdminLayout';
+import WithStaffLayout from '../../layouts/WithStaffLayout';
 import { Card, Box, Image, Heading, Text } from '@chakra-ui/react';
 import noDp from '../../assets/no-dp.png';
 
-const AdminProfile: FC = () => {
+const Profile: FC = () => {
   return (
-    <WithAdminLayout>
+    <WithStaffLayout>
       <Heading fontSize={25} fontWeight={600}>
         Your Profile
       </Heading>
@@ -29,8 +29,8 @@ const AdminProfile: FC = () => {
           feranmi@gabriel.com
         </Text>
       </Card>
-    </WithAdminLayout>
+    </WithStaffLayout>
   );
 };
 
-export default AdminProfile;
+export default Profile;

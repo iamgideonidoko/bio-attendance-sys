@@ -10,6 +10,7 @@ import {
   FormLabel,
   Input,
   Button,
+  Box,
 } from '@chakra-ui/react';
 
 const AddStaff: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ onClose, isOpen, size }) => {
@@ -18,7 +19,7 @@ const AddStaff: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ 
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        <DrawerHeader>Add New Staff</DrawerHeader>
+        <DrawerHeader>Add New Student</DrawerHeader>
         <DrawerBody>
           <form className="login-form" method="post" action="#">
             <FormControl>
@@ -26,16 +27,12 @@ const AddStaff: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ 
               <Input type="text" />
             </FormControl>
             <FormControl marginTop="1rem">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <FormLabel>Matric Number</FormLabel>
+              <Input type="text" />
             </FormControl>
             <FormControl marginTop="1rem">
-              <FormLabel>Password</FormLabel>
-              <Input type="password" />
-            </FormControl>
-            <FormControl marginTop="1rem">
-              <FormLabel>Confirm Password</FormLabel>
-              <Input type="password" />
+              <FormLabel>Fingerprint</FormLabel>
+              <Box shadow="xs" h={240} w={240} margin="1rem auto 0"></Box>
             </FormControl>
             <Button
               w="100%"

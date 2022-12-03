@@ -3,15 +3,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import WithMainLayout from './layouts/WithMainLayout';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
-import AdminLogin from './pages/admin/AdminLogin';
-import AdminRegister from './pages/admin/AdminRegister';
-import StaffLogin from './pages/staff/StaffLogin';
-import AdminProfile from './pages/admin/AdminProfile';
-import AdminManageCourses from './pages/admin/AdminManageCourses';
-import AdminManageStaff from './pages/admin/AdminManageStaff';
-import AdminManageStudents from './pages/admin/AdminManageStudents';
-import AdminSettings from './pages/admin/AdminSettings';
-import AdminManageClasses from './pages/admin/AdminManageClasses';
+import Login from './pages/staff/Login';
+import Register from './pages/staff/Register';
+import Profile from './pages/staff/Profile';
+import ManageCourses from './pages/staff/ManageCourses';
+import ManageStudents from './pages/staff/ManageStudents';
+import Settings from './pages/staff/Settings';
+import ManageAttendance from './pages/staff/ManageAttendance';
 
 function App() {
   const router = createBrowserRouter([
@@ -21,40 +19,32 @@ function App() {
       errorElement: <NotFound />,
     },
     {
-      path: '/admin/login',
-      element: <AdminLogin />,
-    },
-    {
-      path: '/admin/register',
-      element: <AdminRegister />,
-    },
-    {
       path: '/staff/login',
-      element: <StaffLogin />,
+      element: <Login />,
     },
     {
-      path: '/admin/profile',
-      element: <AdminProfile />,
+      path: '/staff/register',
+      element: <Register />,
     },
     {
-      path: '/admin/manage/courses',
-      element: <AdminManageCourses />,
+      path: '/staff/profile',
+      element: <Profile />,
     },
     {
-      path: '/admin/manage/classes',
-      element: <AdminManageClasses />,
+      path: '/staff/manage/courses',
+      element: <ManageCourses />,
     },
     {
-      path: '/admin/manage/staff',
-      element: <AdminManageStaff />,
+      path: '/staff/manage/attendance',
+      element: <ManageAttendance />,
     },
     {
-      path: '/admin/manage/students',
-      element: <AdminManageStudents />,
+      path: '/staff/manage/students',
+      element: <ManageStudents />,
     },
     {
-      path: '/admin/settings',
-      element: <AdminSettings />,
+      path: '/staff/settings',
+      element: <Settings />,
     },
   ]);
 

@@ -1,33 +1,25 @@
 import type { FC } from 'react';
 import { Card, CardHeader, Heading, FormControl, FormLabel, Input, Button, Link, Text } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
-import '../../styles/Admin.scss';
+import '../../styles/Staff.scss';
 
-const AdminLogin: FC = () => {
+const Login: FC = () => {
   return (
     <div>
       <Heading as="h2" fontSize="1.8rem" margin="2rem auto" textAlign="center">
-        ADMIN REGISTER
+        STAFF LOGIN
       </Heading>
       <Card maxW={400} margin="1rem auto">
         <CardHeader fontWeight={600} fontSize="1.7rem" textAlign="center">
-          Register
+          Login
         </CardHeader>
         <form className="login-form" method="post" action="#">
           <FormControl>
-            <FormLabel>Name</FormLabel>
-            <Input type="text" />
-          </FormControl>
-          <FormControl marginTop="1rem">
             <FormLabel>Email address</FormLabel>
             <Input type="email" />
           </FormControl>
           <FormControl marginTop="1rem">
             <FormLabel>Password</FormLabel>
-            <Input type="password" />
-          </FormControl>
-          <FormControl marginTop="1rem">
-            <FormLabel>Confirm Password</FormLabel>
             <Input type="password" />
           </FormControl>
           <Button
@@ -43,7 +35,7 @@ const AdminLogin: FC = () => {
         </form>
         <Text padding="1rem">
           No Account?{' '}
-          <Link as={RouterLink} to="/admin/register" textDecoration="underline">
+          <Link as={RouterLink} to="/staff/register" textDecoration="underline">
             Register
           </Link>
         </Text>
@@ -52,4 +44,4 @@ const AdminLogin: FC = () => {
   );
 };
 
-export default AdminLogin;
+export default Login;

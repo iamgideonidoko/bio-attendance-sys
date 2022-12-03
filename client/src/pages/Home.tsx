@@ -15,11 +15,6 @@ const Home: FC = () => {
         </CardHeader>
         <Flex flexDirection={'column'} gap="1rem" padding="1rem">
           <Button bg="var(--bg-primary)" w="100%">
-            <Link to="/admin/login" className="login-link">
-              ADMIN LOGIN
-            </Link>
-          </Button>
-          <Button bg="var(--bg-primary)" w="100%">
             <Link to="/staff/login" className="login-link">
               STAFF LOGIN
             </Link>
