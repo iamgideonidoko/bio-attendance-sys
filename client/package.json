@@ -20,12 +20,15 @@
     "framer-motion": "^7.6.17",
     "patch-package": "^6.5.0",
     "react": "^18.2.0",
+    "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.4",
+    "react-select": "^5.7.0",
     "zustand": "^4.1.4"
   },
   "devDependencies": {
     "@types/react": "^18.0.24",
+    "@types/react-datepicker": "^4.8.0",
     "@types/react-dom": "^18.0.8",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",

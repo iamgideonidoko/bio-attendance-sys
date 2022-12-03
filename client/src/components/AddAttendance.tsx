@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { FC } from 'react';
 import {
   Drawer,
@@ -10,18 +11,20 @@ import {
   FormLabel,
   Input,
   Button,
-  Box,
 } from '@chakra-ui/react';
 import Select from 'react-select';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-const AddStudent: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ onClose, isOpen, size }) => {
+const AddAttendance: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ onClose, isOpen, size }) => {
+  const [startDate, setStartDate] = useState(new Date());
   const courses = ['csc101', 'hck101', 'phi101'].map((item) => ({ value: item, label: item }));
   return (
     <Drawer onClose={onClose} isOpen={isOpen} size={size}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        <DrawerHeader>Add New Student</DrawerHeader>
+        <DrawerHeader>Add New Attendance</DrawerHeader>
         <DrawerBody>
           <form className="login-form" method="post" action="#">
             <FormControl>
@@ -29,22 +32,15 @@ const AddStudent: FC<{ isOpen: boolean; size: string; onClose: () => void }> = (
               <Input type="text" />
             </FormControl>
             <FormControl marginTop="1rem">
-              <FormLabel>Matric Number</FormLabel>
-              <Input type="text" />
+              <FormLabel>Course</FormLabel>
+              <Select defaultValue={courses[2]} options={courses} />
             </FormControl>
             <FormControl marginTop="1rem">
-              <FormLabel>Fingerprint</FormLabel>
-              <Box shadow="xs" h={240} w={240} margin="1rem auto 0" border="1px solid rgba(0, 0, 0, 0.04)"></Box>
-            </FormControl>
-            <FormControl marginTop="1rem">
-              <FormLabel>Courses</FormLabel>
-              <Select
-                defaultValue={[courses[2], courses[1]]}
-                isMulti
-                name="colors"
-                options={courses}
-                className="basic-multi-select"
-                classNamePrefix="select"
+              <FormLabel>Date</FormLabel>
+              <DatePicker
+                className="attendance-datepicker"
+                selected={startDate}
+                onChange={(date: Date) => setStartDate(date)}
               />
             </FormControl>
             <Button
@@ -55,7 +51,7 @@ const AddStudent: FC<{ isOpen: boolean; size: string; onClose: () => void }> = (
               marginTop="2rem"
               _hover={{ background: 'var(--bg-primary-light)' }}
             >
-              Add student
+              Add Attendance
             </Button>
           </form>
         </DrawerBody>
@@ -64,4 +60,4 @@ const AddStudent: FC<{ isOpen: boolean; size: string; onClose: () => void }> = (
   );
 };
 
-export default AddStudent;
+export default AddAttendance;

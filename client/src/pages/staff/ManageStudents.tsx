@@ -18,7 +18,7 @@ import AddStudent from '../../components/AddStudent';
 import { PlusSquareIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 
 const ManageStudents: FC = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   return (
     <WithStaffLayout>
       <Flex justifyContent="space-between" alignItems="center" marginTop="2rem">
@@ -35,12 +35,13 @@ const ManageStudents: FC = () => {
 
       <TableContainer marginTop={10}>
         <Table variant="simple">
-          <TableCaption>All Staff</TableCaption>
+          <TableCaption>All Students</TableCaption>
           <Thead>
             <Tr>
               <Th>S/N</Th>
               <Th>Name</Th>
               <Th>Matric Number</Th>
+              <Th>Courses</Th>
               <Th>Action</Th>
             </Tr>
           </Thead>
@@ -49,6 +50,7 @@ const ManageStudents: FC = () => {
               <Td>1</Td>
               <Td>James Peter</Td>
               <Td>james@peter.com</Td>
+              <Td>CSC101, HSK101</Td>
               <Td>
                 <Flex justifyContent="flex-start" gap={4} alignItems="center">
                   <IconButton
@@ -72,6 +74,7 @@ const ManageStudents: FC = () => {
               <Td>2</Td>
               <Td>James Peter</Td>
               <Td>SCI19CSC232</Td>
+              <Td>CSC101, HSK101</Td>
               <Td>
                 <Flex justifyContent="flex-start" gap={4} alignItems="center">
                   <IconButton
@@ -95,6 +98,7 @@ const ManageStudents: FC = () => {
               <Td>3</Td>
               <Td>James Peter</Td>
               <Td>james@peter.com</Td>
+              <Td>CSC101, HSK101</Td>
               <Td>
                 <Flex justifyContent="flex-start" gap={4} alignItems="center">
                   <IconButton

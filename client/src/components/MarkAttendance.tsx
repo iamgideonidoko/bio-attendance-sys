@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { FC } from 'react';
 import {
   Drawer,
@@ -8,54 +9,45 @@ import {
   DrawerCloseButton,
   FormControl,
   FormLabel,
-  Input,
+  Text,
   Button,
   Box,
 } from '@chakra-ui/react';
 import Select from 'react-select';
+import { InfoIcon } from '@chakra-ui/icons';
+import { Flex } from '@chakra-ui/react';
 
-const AddStudent: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ onClose, isOpen, size }) => {
+const MarkAttendance: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ isOpen, onClose, size }) => {
   const courses = ['csc101', 'hck101', 'phi101'].map((item) => ({ value: item, label: item }));
   return (
     <Drawer onClose={onClose} isOpen={isOpen} size={size}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        <DrawerHeader>Add New Student</DrawerHeader>
+        <DrawerHeader>Mark Student</DrawerHeader>
         <DrawerBody>
           <form className="login-form" method="post" action="#">
             <FormControl>
-              <FormLabel>Name</FormLabel>
-              <Input type="text" />
-            </FormControl>
-            <FormControl marginTop="1rem">
-              <FormLabel>Matric Number</FormLabel>
-              <Input type="text" />
+              <FormLabel>Student</FormLabel>
+              <Select defaultValue={courses[2]} options={courses} />
             </FormControl>
             <FormControl marginTop="1rem">
               <FormLabel>Fingerprint</FormLabel>
+              <Flex gap="0.4rem" borderLeft="3px solid #534949" padding="0.5rem" alignItems="flex-start">
+                <InfoIcon />
+                <Text fontStyle="italic">Ensure a DigitalPersona scanning device is connected to your PC.</Text>
+              </Flex>
               <Box shadow="xs" h={240} w={240} margin="1rem auto 0" border="1px solid rgba(0, 0, 0, 0.04)"></Box>
-            </FormControl>
-            <FormControl marginTop="1rem">
-              <FormLabel>Courses</FormLabel>
-              <Select
-                defaultValue={[courses[2], courses[1]]}
-                isMulti
-                name="colors"
-                options={courses}
-                className="basic-multi-select"
-                classNamePrefix="select"
-              />
             </FormControl>
             <Button
               w="100%"
               type="submit"
               bg="var(--bg-primary)"
               color="white"
-              marginTop="2rem"
+              marginTop="3rem"
               _hover={{ background: 'var(--bg-primary-light)' }}
             >
-              Add student
+              Mark student
             </Button>
           </form>
         </DrawerBody>
@@ -64,4 +56,4 @@ const AddStudent: FC<{ isOpen: boolean; size: string; onClose: () => void }> = (
   );
 };
 
-export default AddStudent;
+export default MarkAttendance;
