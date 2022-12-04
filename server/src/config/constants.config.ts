@@ -13,6 +13,7 @@ const constants: IConstants = {
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET as Secret,
   accessTokenSpan: '1h',
   refreshTokenSpan: '2d',
+  apiBase: '/api',
 };
 
 export default constants;

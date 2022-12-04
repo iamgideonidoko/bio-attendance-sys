@@ -11,4 +11,5 @@ export interface IConstants {
   refreshTokenSecret: Secret;
   accessTokenSpan: number | string;
   refreshTokenSpan: number | string;
+  apiBase: string;
 }

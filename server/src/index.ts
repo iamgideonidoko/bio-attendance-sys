@@ -1,6 +1,6 @@
 import { createServer } from 'http';
 import express from 'express';
-import type { Application, Request, Response, NextFunction } from 'express';
+import type { Application, Request, Response /*, NextFunction */ } from 'express';
 import { config } from 'dotenv';
 import { envConfig } from './config/environment.config';
 import xss from 'xss-clean';
@@ -11,8 +11,12 @@ import morgan from 'morgan';
 import limiter from './config/limiter.config';
 import appCors from './config/cors.config';
 import { prisma } from './db/prisma-client';
+import constants from './config/constants.config';
 import errorHandler from './middlewares/error.middleware';
-import auth from './middlewares/auth.middleware';
+// import auth from './middlewares/auth.middleware';
+// Routes import
+import authRoute from './routes/auth.route';
+import staffRoute from './routes/staff.route';
 
 config();
 
@@ -56,7 +60,7 @@ config();
   app.use(appCors());
 
   // global authentication
-  app.use(auth as (_: Request, __: Response, ___: NextFunction) => void);
+  // app.use(auth as (_: Request, __: Response, ___: NextFunction) => void);
 
   // test prisma connection
   try {
@@ -73,6 +77,16 @@ config();
       message: 'Service is up and running!',
     });
   });
+
+  app.get(constants.apiBase, (_req: Request, res: Response) => {
+    res.status(200).json({
+      name: 'Core API',
+      description: 'Service is up and running!',
+    });
+  });
+
+  app.use(constants.apiBase, staffRoute);
+  app.use(constants.apiBase, authRoute);
 
   const httpServer = createServer(app);
 
