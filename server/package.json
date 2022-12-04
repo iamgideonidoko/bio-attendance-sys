@@ -15,7 +15,10 @@
     "lint:fix": "eslint ./**/*.{js,jsx,ts,tsx} --fix",
     "studio": "prisma studio",
     "seed": "prisma db seed",
-    "migrate:dev": "prisma migrate dev"
+    "migrate:dev": "prisma migrate dev",
+    "migrate:prod": "prisma migrate prod",
+    "generate:dev": "prisma generate dev",
+    "generate:prod": "prisma generate prod"
   },
   "author": "Gideon Idoko <iamgideonidoko@gmail.com>",
   "license": "MIT",
@@ -37,6 +40,7 @@
     "nodemon": "^2.0.20",
     "prettier": "^2.8.0",
     "prisma": "^4.7.1",
+    "prisma-docs-generator": "^0.5.0",
     "prisma-erd-generator": "^1.2.4",
     "prisma-joi-generator": "^0.2.0",
     "ts-node": "^10.9.1",

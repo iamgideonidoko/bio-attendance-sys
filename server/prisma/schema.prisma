@@ -11,6 +11,10 @@ generator erd {
   output = "./diagrams/ERD-auto.svg"
 }
 
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+}
+
 generator joi {
   provider = "prisma-joi-generator"
   output = "./joi"
@@ -78,4 +82,10 @@ model StudentAttendance {
   attendance_id  String
 
   @@id([student_id, attendance_id])
+}
+
+model Token {
+  id           String      @id @default(uuid())
+  staff_id     String
+  token        String
 }
