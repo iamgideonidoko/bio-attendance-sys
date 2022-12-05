@@ -3,9 +3,9 @@ import type { Request, Response, NextFunction } from 'express';
 import logger from '../helpers/logger.helper';
 import createError from 'http-errors';
 
-const joiValidate = (schema: ObjectSchema) => {
+const joiValidate = (schema: ObjectSchema, type: 'body' | 'query' = 'body') => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const { error } = schema.validate(req.body);
+    const { error } = schema.validate(req[type]);
     if (!error) {
       next();
     } else {

@@ -6,3 +6,15 @@ export interface ILogger {
   errorBg: (message: string, data?: unknown) => void;
   infoBg: (message: string, data?: unknown) => void;
 }
+
+export interface PaginationInput {
+  page: string;
+  per_page: string;
+}
+
+export interface PaginationMeta {
+  per_page: number;
+  page: number;
+  total_pages: number;
+  total_items: number;
+}
