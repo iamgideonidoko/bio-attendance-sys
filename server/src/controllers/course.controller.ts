@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { createSuccess } from '../helpers/http.helper';
 import createError from 'http-errors';
-import { removeCourseFromDb, saveCourseToDb, updateCourseInDb } from '../services/course.service';
+import { checkIfCourseExists, removeCourseFromDb, saveCourseToDb, updateCourseInDb } from '../services/course.service';
 import { prisma } from '../db/prisma-client';
 import type { Course } from '@prisma/client';
 import type { PaginationMeta } from '../interfaces/helper.interface';
@@ -13,21 +13,24 @@ export const getCourses = async (req: Request, res: Response, next: NextFunction
   if (!staff_id) return next(new createError.BadRequest('Staff ID is required'));
   if (!per_page || !page) return next(new createError.BadRequest('Pagination info is required'));
   try {
-    // const courses = await Course.find({ staff_id }).sort({ created_at: -1 });
-    const courseCount = await prisma.course.count();
+    const courseCount = await prisma.course.count({
+      where: {
+        staff_id,
+      },
+    });
     const courses = await prisma.course.findMany({
       where: {
         staff_id,
       },
-      take: Number(page) - 1 * Number(per_page) + 1,
-      skip: Number(page) - 1 * Number(per_page),
+      skip: (Number(page) - 1) * Number(per_page),
+      take: (Number(page) - 1) * Number(per_page) + Number(per_page),
       orderBy: {
         created_at: 'desc',
       },
     });
     const meta: PaginationMeta = {
       total_items: courseCount,
-      total_pages: Math.floor(courseCount / Number(per_page)),
+      total_pages: Math.ceil(courseCount / Number(per_page)),
       page: Number(page),
       per_page: Number(per_page),
     };
@@ -64,6 +67,20 @@ export const createCourse = async (req: Request, res: Response, next: NextFuncti
     return next(createError(400, 'The course_code field is required.'));
   }
   try {
+    const courseExists = await checkIfCourseExists(course_code, staff_id);
+    if (courseExists) {
+      return next(
+        createError(
+          400,
+          ...[
+            {
+              message: 'Course with the same code already exists.',
+              errorType: 'COURSE_ALREADY_EXISTS',
+            },
+          ],
+        ),
+      );
+    }
     const newCourse = { staff_id, course_name, course_code, created_at: new Date() };
     const savedCourse = await saveCourseToDb(newCourse);
     return createSuccess(res, 200, 'Course created successfully', { course: savedCourse });

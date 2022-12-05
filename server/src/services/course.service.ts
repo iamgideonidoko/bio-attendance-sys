@@ -46,3 +46,23 @@ export const updateCourseInDb = (id: string, newUpdate: Partial<Course>): Promis
     }
   });
 };
+
+export const checkIfCourseExists = (course_code: string, staff_id: string): Promise<boolean> => {
+  return new Promise<boolean>(async (resolve, reject) => {
+    try {
+      const course = await prisma.course.findFirst({
+        where: {
+          course_code,
+          staff_id,
+        },
+        select: {
+          id: true,
+        },
+      });
+      if (course) resolve(true);
+      resolve(false);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};

@@ -18,6 +18,8 @@ import errorHandler from './middlewares/error.middleware';
 import authRoute from './routes/auth.route';
 import staffRoute from './routes/staff.route';
 import courseRoute from './routes/course.route';
+import studentRoute from './routes/student.route';
+import attendanceRoute from './routes/attendance.route';
 
 config();
 
@@ -89,6 +91,8 @@ config();
   app.use(constants.apiBase, staffRoute);
   app.use(constants.apiBase, authRoute);
   app.use(constants.apiBase, courseRoute);
+  app.use(constants.apiBase, studentRoute);
+  app.use(constants.apiBase, attendanceRoute);
 
   const httpServer = createServer(app);
 

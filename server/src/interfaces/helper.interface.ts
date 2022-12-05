@@ -18,3 +18,7 @@ export interface PaginationMeta {
   total_pages: number;
   total_items: number;
 }
+
+export interface PrismaBatchPayload {
+  count: number;
+}

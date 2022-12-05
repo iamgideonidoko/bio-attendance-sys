@@ -15,7 +15,7 @@ const handleDevError: ErrorRequestHandler = (err, _req: Request, res: Response) 
 const handleProdError: ErrorRequestHandler = (err, req: Request, res: Response) => {
   if (req.originalUrl.startsWith('/api')) {
     // Operational, trusted error: send message to client
-    console.log('Error object => ', err);
+    logger.error(`Global Error Handler - ${err.message}`);
     if (err.isOperational || err.statusCode?.toString()?.startsWith('4')) {
       return res.status(err.statusCode).json({
         ...err,
@@ -25,7 +25,6 @@ const handleProdError: ErrorRequestHandler = (err, req: Request, res: Response) 
 
     // Programming or other unknown error: don't leak error details
     // 1) Log error
-    logger.error(`Global Error Handler - ${err.message}`);
 
     // 2) Send generic message
     return res.status(500).json({
