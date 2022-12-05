@@ -33,16 +33,20 @@ model Staff {
   password   String
   created_at DateTime
   course     Course[]
+  student    Student[]
+  attendance Attendance[]
 }
 
 model Student {
-  id          String              @id @default(uuid())
+  id          String               @id @default(uuid())
+  staff_id    String
   name        String
   matric_no   String              @unique
   fingerprint String
   created_at  DateTime
   course      StudentCourse[]
   attendance  StudentAttendance[]
+  staff       Staff           @relation(fields: [staff_id], references: [id])
 }
 
 model Course {
@@ -58,11 +62,13 @@ model Course {
 
 model Attendance {
   id           String               @id @default(uuid())
+  staff_id     String
   name         String
   created_at   DateTime
   Date         String
   course_id    String
   course       Course               @relation(fields: [course_id], references: [id])
+  staff        Staff                @relation(fields: [staff_id], references: [id])
   student      StudentAttendance[]
 }
 
