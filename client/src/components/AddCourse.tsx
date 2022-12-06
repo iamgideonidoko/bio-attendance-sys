@@ -30,6 +30,7 @@ const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({
   const { isLoading, mutate: addCourse } = useAddCourse({
     onSuccess: () => {
       toast.success('Course added successfully');
+      setCourseInput((prev) => ({ ...prev, course_name: '', course_code: '' }));
     },
     onError: (err) => {
       toast.error((baseError(err).response?.data?.message as string) ?? 'An error occured');
