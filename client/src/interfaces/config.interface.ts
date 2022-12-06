@@ -1,6 +1,6 @@
 export interface IEnvConfig {
-  isProduction: boolean;
-  isDevelopment: boolean;
+  isProd: boolean;
+  isDev: boolean;
 }
 export interface IConstants {
   baseUrl: string;
