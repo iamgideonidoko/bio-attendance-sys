@@ -8,6 +8,7 @@ import type { RegisterStaffInput } from '../../interfaces/api.interface';
 import { useRegisterStaff } from '../../api/staff.api';
 import { toast } from 'react-hot-toast';
 import useStore from '../../store/store';
+import { baseError } from '../../helpers/api.helper';
 
 const Register: FC = () => {
   const [registerInput, setRegisterInput] = useState<RegisterStaffInput>({
@@ -22,6 +23,9 @@ const Register: FC = () => {
     onSuccess: (data) => {
       toast.success('Registration successful');
       loginStaff(data?.data?.staff);
+    },
+    onError: (err) => {
+      toast.error((baseError(err).response?.data?.message as string) ?? 'An error occured');
     },
   });
 
@@ -46,7 +50,6 @@ const Register: FC = () => {
     e.preventDefault();
     if (simpleValidator.current.allValid()) {
       try {
-        console.log('all good');
         registerStaff(registerInput);
       } catch (err) {
         console.log('error => ', err);
@@ -110,6 +113,7 @@ const Register: FC = () => {
             color="white"
             marginTop="2rem"
             _hover={{ background: 'var(--bg-primary-light)' }}
+            disabled={isLoading}
           >
             {isLoading ? 'Registering...' : 'Register'}
           </Button>
