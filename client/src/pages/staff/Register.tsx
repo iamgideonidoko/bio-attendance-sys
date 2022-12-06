@@ -8,7 +8,6 @@ import type { RegisterStaffInput } from '../../interfaces/api.interface';
 import { useRegisterStaff } from '../../api/staff.api';
 import { toast } from 'react-hot-toast';
 import useStore from '../../store/store';
-import { baseError } from '../../helpers/api.helper';
 
 const Register: FC = () => {
   const [registerInput, setRegisterInput] = useState<RegisterStaffInput>({
@@ -25,7 +24,7 @@ const Register: FC = () => {
       loginStaff(data?.data?.staff);
     },
     onError: (err) => {
-      toast.error((baseError(err).response?.data?.message as string) ?? 'An error occured');
+      toast.error((err.response?.data?.message as string) ?? 'An error occured');
     },
   });
 

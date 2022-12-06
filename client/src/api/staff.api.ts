@@ -4,9 +4,10 @@ import type {
   RegisterStaffResult,
   LoginStaffInput,
   LoginStaffResult,
+  BaseError,
 } from '../interfaces/api.interface';
 import { useBaseMutation } from '../helpers/store.helper';
 
-export const useRegisterStaff = useBaseMutation<RegisterStaffResult, RegisterStaffInput>('/staff/register');
+export const useRegisterStaff = useBaseMutation<RegisterStaffResult, BaseError, RegisterStaffInput>('/staff/register');
 
-export const useLoginStaff = useBaseMutation<LoginStaffResult, LoginStaffInput>('/auth/staff/login');
+export const useLoginStaff = useBaseMutation<LoginStaffResult, BaseError, LoginStaffInput>('/auth/staff/login');

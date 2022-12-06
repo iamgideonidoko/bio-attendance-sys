@@ -8,7 +8,6 @@ import { useLoginStaff } from '../../api/staff.api';
 import { toast } from 'react-hot-toast';
 import useStore from '../../store/store';
 import SimpleReactValidator from 'simple-react-validator';
-import { baseError } from '../../helpers/api.helper';
 
 const Login: FC = () => {
   const [loginInput, setLoginInput] = useState<LoginStaffInput>({
@@ -23,7 +22,7 @@ const Login: FC = () => {
       login(data?.data?.staff);
     },
     onError: (err) => {
-      toast.error((baseError(err).response?.data?.message as string) ?? 'An error occured');
+      toast.error((err.response?.data?.message as string) ?? 'An error occured');
     },
   });
 

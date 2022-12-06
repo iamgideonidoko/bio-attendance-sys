@@ -16,7 +16,6 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { toast } from 'react-hot-toast';
-import { baseError } from '../helpers/api.helper';
 import useStore from '../store/store';
 
 const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ onClose, isOpen, size }) => {
@@ -33,7 +32,7 @@ const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({
       setCourseInput((prev) => ({ ...prev, course_name: '', course_code: '' }));
     },
     onError: (err) => {
-      toast.error((baseError(err).response?.data?.message as string) ?? 'An error occured');
+      toast.error((err.response?.data?.message as string) ?? 'An error occured');
     },
   });
   const simpleValidator = useRef(
