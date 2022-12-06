@@ -49,3 +49,18 @@ body, h1, h2, h3, h4, h5, h6 {
 .login-form {
   padding: 1rem;
 }
+
+.formErrorMsg {
+	/*color: #843534;
+	*/color: #a94442;
+	background-color: #f2dede;
+	border: 1px solid #ebccd1;
+	border-radius: 4px;
+	font-size: 13px;
+	padding: 6px;
+	margin: 10px 0;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
+}

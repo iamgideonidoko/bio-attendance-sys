@@ -13,6 +13,9 @@ import ManageAttendance from './pages/staff/ManageAttendance';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './lib/query-client';
 import useStore from './store/store';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Toaster } from 'react-hot-toast';
+import AuthLayout from './layouts/AuthLayout';
 
 function App() {
   useStore();
@@ -24,31 +27,59 @@ function App() {
     },
     {
       path: '/staff/login',
-      element: <Login />,
+      element: (
+        <AuthLayout routeType="noauth">
+          <Login />
+        </AuthLayout>
+      ),
     },
     {
       path: '/staff/register',
-      element: <Register />,
+      element: (
+        <AuthLayout routeType="noauth">
+          <Register />
+        </AuthLayout>
+      ),
     },
     {
       path: '/staff/profile',
-      element: <Profile />,
+      element: (
+        <AuthLayout routeType="auth">
+          <Profile />
+        </AuthLayout>
+      ),
     },
     {
       path: '/staff/manage/courses',
-      element: <ManageCourses />,
+      element: (
+        <AuthLayout routeType="auth">
+          <ManageCourses />
+        </AuthLayout>
+      ),
     },
     {
       path: '/staff/manage/attendance',
-      element: <ManageAttendance />,
+      element: (
+        <AuthLayout routeType="auth">
+          <ManageAttendance />
+        </AuthLayout>
+      ),
     },
     {
       path: '/staff/manage/students',
-      element: <ManageStudents />,
+      element: (
+        <AuthLayout routeType="auth">
+          <ManageStudents />
+        </AuthLayout>
+      ),
     },
     {
       path: '/staff/settings',
-      element: <Settings />,
+      element: (
+        <AuthLayout routeType="auth">
+          <Settings />
+        </AuthLayout>
+      ),
     },
   ]);
 
@@ -65,6 +96,8 @@ function App() {
       <WithMainLayout>
         <RouterProvider router={router} />
       </WithMainLayout>
+      <Toaster />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
