@@ -10,6 +10,8 @@ import ManageCourses from './pages/staff/ManageCourses';
 import ManageStudents from './pages/staff/ManageStudents';
 import Settings from './pages/staff/Settings';
 import ManageAttendance from './pages/staff/ManageAttendance';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './lib/query-client';
 
 function App() {
   const router = createBrowserRouter([
@@ -57,9 +59,11 @@ function App() {
   // }, []);
 
   return (
-    <WithMainLayout>
-      <RouterProvider router={router} />
-    </WithMainLayout>
+    <QueryClientProvider client={queryClient}>
+      <WithMainLayout>
+        <RouterProvider router={router} />
+      </WithMainLayout>
+    </QueryClientProvider>
   );
 }
 
