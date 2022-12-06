@@ -1,6 +1,13 @@
 import type { StaffInfo, Tokens } from '../interfaces/store.interface';
 import { AxiosError } from 'axios';
 
+export interface PaginationMeta {
+  per_page: number;
+  page: number;
+  total_pages: number;
+  total_items: number;
+}
+
 /* STAFF */
 export interface RegisterStaffInput {
   name: string;
@@ -52,4 +59,9 @@ export interface AddCourseInput {
 
 export type AddCourseResult = BaseResult<{
   course: Course;
+}>;
+
+export type GetCoursesResult = BaseResult<{
+  courses: Course[];
+  meta: PaginationMeta;
 }>;

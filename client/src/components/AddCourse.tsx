@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { toast } from 'react-hot-toast';
 import useStore from '../store/store';
+import { queryClient } from '../lib/query-client';
 
 const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ onClose, isOpen, size }) => {
   const staffInfo = useStore.use.staffInfo();
@@ -30,6 +31,7 @@ const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({
     onSuccess: () => {
       toast.success('Course added successfully');
       setCourseInput((prev) => ({ ...prev, course_name: '', course_code: '' }));
+      queryClient.invalidateQueries({ queryKey: ['courses'] });
     },
     onError: (err) => {
       toast.error((err.response?.data?.message as string) ?? 'An error occured');

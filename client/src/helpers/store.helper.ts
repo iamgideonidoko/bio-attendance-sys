@@ -16,9 +16,9 @@ export function useBaseMutation<TRes = unknown, TError = unknown, TData = unknow
 
 export function useBaseQuery<
   TQueryFnData = unknown,
-  TQueryKey extends QueryKey = QueryKey,
   TError = unknown,
   TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
 >(url: string) {
   return (useQueryOptions: Omit<UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>, 'queryFn'> = {}) =>
     useQuery<TQueryFnData, TError, TData, TQueryKey>({
