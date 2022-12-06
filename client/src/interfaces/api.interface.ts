@@ -1,6 +1,7 @@
 import type { StaffInfo, Tokens } from '../interfaces/store.interface';
 import { AxiosError } from 'axios';
 
+/* STAFF */
 export interface RegisterStaffInput {
   name: string;
   email: string;
@@ -33,3 +34,22 @@ export interface LoginStaffInput {
 }
 
 export type LoginStaffResult = RegisterStaffResult;
+
+/* COURSE */
+
+export interface Course {
+  id: string;
+  course_name: string;
+  course_code: string;
+  created_at: string;
+}
+
+export interface AddCourseInput {
+  staff_id: string;
+  course_name: string;
+  course_code: string;
+}
+
+export type AddCourseResult = BaseResult<{
+  course: Course;
+}>;
