@@ -1,8 +1,8 @@
-import { useRef, useState } from 'react';
-import type { FC, ChangeEventHandler, FormEventHandler, Dispatch, SetStateAction } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import type { FC, ChangeEventHandler, FormEventHandler } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import { AddCourseInput } from '../interfaces/api.interface';
-import { useAddCourse } from '../api/course.api';
+import { AddCourseInput, Course } from '../interfaces/api.interface';
+import { useAddCourse, useUpdateCourse } from '../api/course.api';
 import {
   Drawer,
   DrawerOverlay,
@@ -19,12 +19,14 @@ import { toast } from 'react-hot-toast';
 import useStore from '../store/store';
 import { queryClient } from '../lib/query-client';
 
-const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void; closeDrawer: () => void }> = ({
-  onClose,
-  isOpen,
-  size,
-  closeDrawer,
-}) => {
+const AddCourse: FC<{
+  isOpen: boolean;
+  size: string;
+  onClose: () => void;
+  closeDrawer: () => void;
+  activeCourse: Course | null;
+  setActiveCourse: (course: Course | null) => void;
+}> = ({ onClose, isOpen, size, closeDrawer, activeCourse, setActiveCourse }) => {
   const staffInfo = useStore.use.staffInfo();
   const [courseInput, setCourseInput] = useState<AddCourseInput>({
     staff_id: staffInfo?.id as string,
@@ -43,6 +45,27 @@ const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void; closeD
       toast.error((err.response?.data?.message as string) ?? 'An error occured');
     },
   });
+  const { isLoading: isUpdating, mutate: updateCourse } = useUpdateCourse({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['courses'] });
+      setActiveCourse(null);
+      closeDrawer();
+      toast.success('Course updated successfully');
+      setCourseInput((prev) => ({ ...prev, course_name: '', course_code: '' }));
+    },
+    onError: (err) => {
+      toast.error((err.response?.data?.message as string) ?? 'An error occured');
+    },
+  });
+  useEffect(() => {
+    if (isOpen && activeCourse) {
+      setCourseInput((prev) => ({
+        ...prev,
+        course_name: activeCourse.course_name,
+        course_code: activeCourse.course_code,
+      }));
+    }
+  }, [isOpen, activeCourse]);
   const simpleValidator = useRef(
     new SimpleReactValidator({
       element: (message: string) => <div className="formErrorMsg">{message}</div>,
@@ -58,7 +81,11 @@ const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void; closeD
     e.preventDefault();
     if (simpleValidator.current.allValid()) {
       try {
-        addCourse(courseInput);
+        if (activeCourse) {
+          updateCourse({ ...courseInput, id: activeCourse.id, url: `/${activeCourse.id}` });
+        } else {
+          addCourse(courseInput);
+        }
       } catch (err) {
         console.log('error => ', err);
       }
@@ -73,7 +100,7 @@ const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void; closeD
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        <DrawerHeader>Add New Course</DrawerHeader>
+        <DrawerHeader>{activeCourse ? 'Update' : 'Add New'} Course</DrawerHeader>
         <DrawerBody>
           <form className="login-form" method="post" action="#" onSubmit={handleAddCourse}>
             <FormControl>
@@ -115,7 +142,13 @@ const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void; closeD
               _hover={{ background: 'var(--bg-primary-light)' }}
               disabled={isLoading}
             >
-              {isLoading ? 'Adding course...' : 'Add course'}
+              {isUpdating && activeCourse
+                ? 'Updating course...'
+                : isLoading && !activeCourse
+                ? 'Adding course...'
+                : activeCourse
+                ? 'Update course'
+                : 'Add course'}
             </Button>
           </form>
         </DrawerBody>

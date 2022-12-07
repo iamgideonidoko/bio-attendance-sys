@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { FC } from 'react';
 import WithStaffLayout from '../../layouts/WithStaffLayout';
 import {
@@ -24,12 +24,14 @@ import useStore from '../../store/store';
 import { Button } from '@chakra-ui/react';
 import { toast } from 'react-hot-toast';
 import { queryClient } from '../../lib/query-client';
+import { Course } from '../../interfaces/api.interface';
 
 const ManageCourses: FC = () => {
   const staffInfo = useStore.use.staffInfo();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [page, setPage] = useState<number>(1);
   const [per_page] = useState<number>(10);
+  const [activeCourse, setActiveCourse] = useState<Course | null>(null);
   const { data, error, isLoading, isError } = useGetCourses(
     staffInfo?.id as string,
     page,
@@ -50,6 +52,14 @@ const ManageCourses: FC = () => {
       toast.error((err.response?.data?.message as string) ?? 'An error occured');
     },
   });
+
+  useEffect(() => {
+    if (activeCourse) {
+      setDrawerOpen(true);
+    } else {
+      setDrawerOpen(false);
+    }
+  }, [activeCourse]);
 
   const meta = data?.data?.meta;
 
@@ -100,6 +110,7 @@ const ManageCourses: FC = () => {
                         _hover={{ color: 'white', background: 'var(--bg-primary)' }}
                         color="var(--bg-primary)"
                         aria-label="Edit course"
+                        onClick={() => setActiveCourse(course)}
                         icon={<EditIcon />}
                       />
                       <IconButton
@@ -151,6 +162,8 @@ const ManageCourses: FC = () => {
         onClose={() => setDrawerOpen(false)}
         size="md"
         closeDrawer={() => setDrawerOpen(false)}
+        activeCourse={activeCourse}
+        setActiveCourse={(course) => setActiveCourse(course)}
       />
     </WithStaffLayout>
   );

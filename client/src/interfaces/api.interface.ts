@@ -69,3 +69,15 @@ export type GetCoursesResult = BaseResult<{
 export type DeleteCourseResult = BaseResult<{
   deleted: boolean;
 }>;
+
+export interface UpdateCourseInput {
+  id: string;
+  staff_id: string;
+  course_name: string;
+  course_code: string;
+  url: string;
+}
+
+export type UpdateCourseResult = BaseResult<{
+  course: Course;
+}>;
