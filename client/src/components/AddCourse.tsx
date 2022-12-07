@@ -147,7 +147,7 @@ const AddCourse: FC<{
               color="white"
               marginTop="2rem"
               _hover={{ background: 'var(--bg-primary-light)' }}
-              disabled={isLoading}
+              disabled={isLoading || isUpdating}
             >
               {isUpdating && activeCourse
                 ? 'Updating course...'

@@ -153,6 +153,7 @@ const AddAttendance: FC<{
               color="white"
               marginTop="2rem"
               _hover={{ background: 'var(--bg-primary-light)' }}
+              disabled={isLoading || isUpdating}
             >
               {isUpdating && activeAttendance
                 ? 'Updating attendance...'

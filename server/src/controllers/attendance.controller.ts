@@ -6,6 +6,7 @@ import {
   saveAttendanceToDb,
   updateAttendanceInDb,
   fetchOneAttendance,
+  removeAllStudentAttendance,
 } from '../services/attendance.service';
 import { prisma } from '../db/prisma-client';
 import type { Attendance, StudentAttendance } from '@prisma/client';
@@ -145,6 +146,7 @@ export const deleteAttendance = async (req: Request, res: Response, next: NextFu
   const { id } = req.params;
   if (!id) return next(createError(400, 'No attendance ID provided'));
   try {
+    await removeAllStudentAttendance(id);
     await removeAttendanceFromDb(id);
     return createSuccess(res, 200, 'Attendance deleted successfully', { deleted: true });
   } catch (err) {

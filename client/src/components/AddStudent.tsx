@@ -176,6 +176,7 @@ const AddStudent: FC<{
               color="white"
               marginTop="2rem"
               _hover={{ background: 'var(--bg-primary-light)' }}
+              disabled={isLoading || isUpdating}
             >
               {isUpdating && activeStudent
                 ? 'Updating student...'

@@ -1,6 +1,7 @@
 import createError from 'http-errors';
 import { prisma } from '../db/prisma-client';
 import type { Attendance, StudentAttendance, Student } from '@prisma/client';
+import type { PrismaBatchPayload } from '../interfaces/helper.interface';
 
 export const fetchOneAttendance = (attendanceId: string): Promise<Attendance> => {
   return new Promise<Attendance>(async (resolve, reject) => {
@@ -43,6 +44,21 @@ export const markStudentAttendance = (studentAttendanceInfo: StudentAttendance):
     try {
       const studentAttendance = await prisma.studentAttendance.create({
         data: studentAttendanceInfo,
+      });
+      resolve(studentAttendance);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+export const removeAllStudentAttendance = (attendance_id: string): Promise<PrismaBatchPayload> => {
+  return new Promise<PrismaBatchPayload>(async (resolve, reject) => {
+    try {
+      const studentAttendance = await prisma.studentAttendance.deleteMany({
+        where: {
+          attendance_id,
+        },
       });
       resolve(studentAttendance);
     } catch (err) {

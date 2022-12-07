@@ -17,23 +17,29 @@ import {
   Spinner,
   Box,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import AddAttendance from '../../components/AddAttendance';
-import { PlusSquareIcon, EditIcon, DeleteIcon, CheckIcon } from '@chakra-ui/icons';
+import { PlusSquareIcon, EditIcon, DeleteIcon, CheckIcon, InfoIcon } from '@chakra-ui/icons';
 import MarkAttendance from '../../components/MarkAttendance';
 import { useGetAttendances, useDeleteAttendance } from '../../api/atttendance.api';
 import useStore from '../../store/store';
 import { toast } from 'react-hot-toast';
 import { queryClient } from '../../lib/query-client';
 import { Attendance } from '../../interfaces/api.interface';
+import dayjs from 'dayjs';
+import AttendanceList from '../../components/AttendanceList';
 
 const ManageAttendance: FC = () => {
   const staffInfo = useStore.use.staffInfo();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [drawerOpen2, setDrawerOpen2] = useState<boolean>(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [page, setPage] = useState<number>(1);
   const [per_page] = useState<number>(10);
   const [activeAttendance, setActiveAttendance] = useState<Attendance | null>(null);
+  const [activeAttendance2, setActiveAttendance2] = useState<Attendance | null>(null);
+  const [activeAttendance3, setActiveAttendance3] = useState<Attendance | null>(null);
   const { data, error, isLoading, isError } = useGetAttendances(
     staffInfo?.id as string,
     page,
@@ -43,6 +49,7 @@ const ManageAttendance: FC = () => {
     keepPreviousData: true,
   });
   const toastRef = useRef<string>('');
+  const btnRef = useRef(null);
   const { mutate: deleteAttendance } = useDeleteAttendance({
     onSuccess: () => {
       queryClient.invalidateQueries(['attendances']);
@@ -62,6 +69,14 @@ const ManageAttendance: FC = () => {
       setDrawerOpen(false);
     }
   }, [activeAttendance]);
+
+  useEffect(() => {
+    if (activeAttendance2) {
+      setDrawerOpen2(true);
+    } else {
+      setDrawerOpen2(false);
+    }
+  }, [activeAttendance2]);
 
   const meta = data?.data?.meta;
   return (
@@ -105,7 +120,7 @@ const ManageAttendance: FC = () => {
                   <Td>{(page - 1) * per_page + (idx + 1)}</Td>
                   <Td>{attendance.name}</Td>
                   <Td>{attendance.course?.course_code}</Td>
-                  <Td>{attendance.date}</Td>
+                  <Td>{dayjs(attendance.date).format('DD/MM/YYYY')}</Td>
                   <Td>
                     <Flex justifyContent="flex-start" gap={4} alignItems="center">
                       <Button
@@ -115,9 +130,24 @@ const ManageAttendance: FC = () => {
                         _hover={{ background: 'var(--bg-primary-light)' }}
                         size="xs"
                         variant="solid"
-                        onClick={() => setDrawerOpen2(true)}
+                        onClick={() => setActiveAttendance2(attendance)}
                       >
                         Mark
+                      </Button>
+                      <Button
+                        leftIcon={<InfoIcon />}
+                        bg="var(--bg-primary)"
+                        color="white"
+                        _hover={{ background: 'var(--bg-primary-light)' }}
+                        size="xs"
+                        variant="solid"
+                        ref={btnRef}
+                        onClick={() => {
+                          setActiveAttendance3(attendance);
+                          onOpen();
+                        }}
+                      >
+                        List
                       </Button>
                       <IconButton
                         bg="transparent"
@@ -185,7 +215,20 @@ const ManageAttendance: FC = () => {
         activeAttendance={activeAttendance}
         setActiveAttendance={(attendance) => setActiveAttendance(attendance)}
       />
-      <MarkAttendance isOpen={drawerOpen2} onClose={() => setDrawerOpen2(false)} size="md" />
+      <MarkAttendance
+        isOpen={drawerOpen2}
+        onClose={() => {
+          setActiveAttendance2(null);
+          setDrawerOpen2(false);
+        }}
+        size="md"
+        closeDrawer={() => {
+          setActiveAttendance2(null);
+          setDrawerOpen2(false);
+        }}
+        activeAttendance={activeAttendance2}
+      />
+      <AttendanceList isOpen={isOpen} onClose={onClose} attendance={activeAttendance3} />
     </WithStaffLayout>
   );
 };

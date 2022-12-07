@@ -6,6 +6,9 @@ import type {
   GetAttendancesResult,
   UpdateAttendanceInput,
   UpdateAttendanceResult,
+  MarkAttendanceInput,
+  MarkAttendanceResult,
+  GetAttendanceListResult,
 } from '../interfaces/api.interface';
 import { useBaseMutation, useBaseQuery } from '../helpers/store.helper';
 import { DeleteAttendanceResult } from '../interfaces/api.interface';
@@ -25,3 +28,10 @@ export const useUpdateAttendance = useBaseMutation<UpdateAttendanceResult, BaseE
   `/attendance`,
   'put',
 );
+
+export const useMarkAttendance = useBaseMutation<MarkAttendanceResult, BaseError, MarkAttendanceInput>(
+  '/attendance/student',
+);
+
+export const useGetAttendanceList = (attendance_id: string) =>
+  useBaseQuery<GetAttendanceListResult, BaseError>(`/attendance/${attendance_id}/students`);

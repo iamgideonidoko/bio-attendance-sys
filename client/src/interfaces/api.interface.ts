@@ -158,3 +158,20 @@ export type UpdateAttendanceInput = AddAttendanceInput & { id: string; url: stri
 export type UpdateAttendanceResult = BaseResult<{
   attendance: Attendance;
 }>;
+
+export interface MarkAttendanceInput {
+  attendance_id: string;
+  student_id: string;
+}
+
+export type MarkAttendanceResult = BaseResult<{
+  marked: boolean;
+}>;
+
+export type GetAttendanceListResult = BaseResult<{
+  attendanceList: Array<{
+    student_id: string;
+    attendance_id: string;
+    student: Student;
+  }>;
+}>;
