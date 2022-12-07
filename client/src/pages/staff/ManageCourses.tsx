@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import type { FC } from 'react';
 import WithStaffLayout from '../../layouts/WithStaffLayout';
 import {
@@ -19,9 +19,11 @@ import {
 } from '@chakra-ui/react';
 import AddCourse from '../../components/AddCourse';
 import { PlusSquareIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
-import { useGetCourses } from '../../api/course.api';
+import { useGetCourses, useDeleteCourse } from '../../api/course.api';
 import useStore from '../../store/store';
 import { Button } from '@chakra-ui/react';
+import { toast } from 'react-hot-toast';
+import { queryClient } from '../../lib/query-client';
 
 const ManageCourses: FC = () => {
   const staffInfo = useStore.use.staffInfo();
@@ -36,9 +38,19 @@ const ManageCourses: FC = () => {
     queryKey: ['courses', page],
     keepPreviousData: true,
   });
-  console.log('data => ', data);
-  console.log('isLoading => ', isLoading);
-  console.log('isError => ', isError);
+  const toastRef = useRef<string>('');
+  const { mutate: deleteCourse } = useDeleteCourse({
+    onSuccess: () => {
+      queryClient.invalidateQueries(['courses']);
+      toast.dismiss(toastRef.current);
+      toast.success('Course deleted successfully');
+    },
+    onError: (err) => {
+      toast.dismiss(toastRef.current);
+      toast.error((err.response?.data?.message as string) ?? 'An error occured');
+    },
+  });
+
   const meta = data?.data?.meta;
 
   return (
@@ -77,7 +89,7 @@ const ManageCourses: FC = () => {
             </Thead>
             <Tbody>
               {data?.data?.courses?.map((course, idx) => (
-                <Tr>
+                <Tr key={idx}>
                   <Td>{(page - 1) * per_page + (idx + 1)}</Td>
                   <Td>{course.course_name}</Td>
                   <Td>{course.course_code}</Td>
@@ -95,6 +107,10 @@ const ManageCourses: FC = () => {
                         color="#d10d0d"
                         _hover={{ color: 'white', background: '#d10d0d' }}
                         aria-label="Delete course"
+                        onClick={() => {
+                          toastRef.current = toast.loading('Deleting course...');
+                          deleteCourse({ url: `/${course.id}` });
+                        }}
                         icon={<DeleteIcon />}
                       />
                     </Flex>
@@ -130,7 +146,12 @@ const ManageCourses: FC = () => {
         </TableContainer>
       )}
 
-      <AddCourse isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} size="md" />
+      <AddCourse
+        isOpen={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        size="md"
+        closeDrawer={() => setDrawerOpen(false)}
+      />
     </WithStaffLayout>
   );
 };

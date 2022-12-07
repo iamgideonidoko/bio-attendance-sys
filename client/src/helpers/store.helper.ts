@@ -1,6 +1,7 @@
 import type { UseMutationOptions, UseQueryOptions, QueryKey } from '@tanstack/react-query';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { axiosClient } from '../lib/axios-client';
+import { removeObjectProps } from './global.helper';
 
 export function useBaseMutation<TRes = unknown, TError = unknown, TData = unknown, TContext = unknown>(
   url: string,
@@ -9,7 +10,9 @@ export function useBaseMutation<TRes = unknown, TError = unknown, TData = unknow
   return (useMutationOptions: Omit<UseMutationOptions<TRes, TError, TData, TContext>, 'mutationFn'> = {}) =>
     useMutation<TRes, TError, TData, TContext>(
       async (data) =>
-        method === 'delete' ? (await axiosClient[method](url)).data : (await axiosClient[method](url, data)).data,
+        method === 'delete'
+          ? (await axiosClient[method](url + (data as TData & { url?: string })?.url ?? '')).data
+          : (await axiosClient[method](url, removeObjectProps(data as { [k: string]: unknown }, ['url']))).data,
       useMutationOptions,
     );
 }

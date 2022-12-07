@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import type { FC, ChangeEventHandler, FormEventHandler } from 'react';
+import type { FC, ChangeEventHandler, FormEventHandler, Dispatch, SetStateAction } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import { AddCourseInput } from '../interfaces/api.interface';
 import { useAddCourse } from '../api/course.api';
@@ -19,7 +19,12 @@ import { toast } from 'react-hot-toast';
 import useStore from '../store/store';
 import { queryClient } from '../lib/query-client';
 
-const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({ onClose, isOpen, size }) => {
+const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void; closeDrawer: () => void }> = ({
+  onClose,
+  isOpen,
+  size,
+  closeDrawer,
+}) => {
   const staffInfo = useStore.use.staffInfo();
   const [courseInput, setCourseInput] = useState<AddCourseInput>({
     staff_id: staffInfo?.id as string,
@@ -29,9 +34,10 @@ const AddCourse: FC<{ isOpen: boolean; size: string; onClose: () => void }> = ({
   const [, forceUpdate] = useState<boolean>(false);
   const { isLoading, mutate: addCourse } = useAddCourse({
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['courses'] });
+      closeDrawer();
       toast.success('Course added successfully');
       setCourseInput((prev) => ({ ...prev, course_name: '', course_code: '' }));
-      queryClient.invalidateQueries({ queryKey: ['courses'] });
     },
     onError: (err) => {
       toast.error((err.response?.data?.message as string) ?? 'An error occured');

@@ -65,3 +65,7 @@ export type GetCoursesResult = BaseResult<{
   courses: Course[];
   meta: PaginationMeta;
 }>;
+
+export type DeleteCourseResult = BaseResult<{
+  deleted: boolean;
+}>;
