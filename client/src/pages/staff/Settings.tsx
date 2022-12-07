@@ -1,8 +1,10 @@
 import type { FC } from 'react';
 import WithStaffLayout from '../../layouts/WithStaffLayout';
-import { Card, CardHeader, Heading, FormControl, FormLabel, Input, Button, Link, Text } from '@chakra-ui/react';
+import { Card, Heading, FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
+import useStore from '../../store/store';
 
 const Settings: FC = () => {
+  const staffInfo = useStore.use.staffInfo();
   return (
     <WithStaffLayout>
       <div>
@@ -10,14 +12,14 @@ const Settings: FC = () => {
           SETTINGS
         </Heading>
         <Card maxW={400} margin="1rem auto">
-          <form className="login-form" method="post" action="#">
+          <form className="login-form" method="post" action="#" onSubmit={(e) => e.preventDefault()}>
             <FormControl>
               <FormLabel>Name</FormLabel>
-              <Input type="text" />
+              <Input type="text" value={staffInfo?.name} />
             </FormControl>
             <FormControl marginTop="1rem">
               <FormLabel>Email address</FormLabel>
-              <Input type="email" disabled value="test@email.com" />
+              <Input type="email" disabled value={staffInfo?.email} />
             </FormControl>
             <FormControl marginTop="1rem">
               <FormLabel>New Password</FormLabel>
