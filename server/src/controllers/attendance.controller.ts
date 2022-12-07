@@ -19,7 +19,11 @@ export const getAttendances = async (req: Request, res: Response, next: NextFunc
   if (!staff_id) return next(new createError.BadRequest('Staff ID is required'));
   if (!per_page || !page) return next(new createError.BadRequest('Pagination info is required'));
   try {
-    const attendanceCount = await prisma.attendance.count();
+    const attendanceCount = await prisma.attendance.count({
+      where: {
+        staff_id,
+      },
+    });
     const attendances = await prisma.attendance.findMany({
       where: {
         staff_id,
@@ -32,6 +36,8 @@ export const getAttendances = async (req: Request, res: Response, next: NextFunc
       include: {
         course: {
           select: {
+            id: true,
+            course_code: true,
             course_name: true,
           },
         },
@@ -39,7 +45,7 @@ export const getAttendances = async (req: Request, res: Response, next: NextFunc
     });
     const meta: PaginationMeta = {
       total_items: attendanceCount,
-      total_pages: Math.ceil(attendanceCount / Number(per_page)),
+      total_pages: Math.ceil(attendanceCount / Number(per_page)) || 1,
       page: Number(page),
       per_page: Number(per_page),
     };

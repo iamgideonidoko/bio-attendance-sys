@@ -30,6 +30,21 @@ export const saveStudentCoursesToDb = (studentCourseInfoArray: StudentCourse[]):
   });
 };
 
+export const removeAllStudentCoursesToDb = (student_id: string): Promise<PrismaBatchPayload> => {
+  return new Promise<PrismaBatchPayload>(async (resolve, reject) => {
+    try {
+      const batchPayload = await prisma.studentCourse.deleteMany({
+        where: {
+          student_id,
+        },
+      });
+      resolve(batchPayload);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
 export const getStudentCourses = (
   student_id: string,
 ): Promise<

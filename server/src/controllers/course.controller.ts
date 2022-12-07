@@ -30,7 +30,7 @@ export const getCourses = async (req: Request, res: Response, next: NextFunction
     });
     const meta: PaginationMeta = {
       total_items: courseCount,
-      total_pages: Math.ceil(courseCount / Number(per_page)),
+      total_pages: Math.ceil(courseCount / Number(per_page)) || 1,
       page: Number(page),
       per_page: Number(per_page),
     };

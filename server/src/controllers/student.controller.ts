@@ -7,6 +7,7 @@ import {
   updateStudentInDb,
   saveStudentCoursesToDb,
   checkIfStudentExists,
+  removeAllStudentCoursesToDb,
 } from '../services/student.service';
 import { prisma } from '../db/prisma-client';
 import type { Student } from '@prisma/client';
@@ -20,7 +21,11 @@ export const getStudents = async (req: Request, res: Response, next: NextFunctio
   if (!staff_id) return next(new createError.BadRequest('Staff ID is required'));
   if (!per_page || !page) return next(new createError.BadRequest('Pagination info is required'));
   try {
-    const studentCount = await prisma.student.count();
+    const studentCount = await prisma.student.count({
+      where: {
+        staff_id,
+      },
+    });
     const students = await prisma.student.findMany({
       where: {
         staff_id,
@@ -46,7 +51,7 @@ export const getStudents = async (req: Request, res: Response, next: NextFunctio
     });
     const meta: PaginationMeta = {
       total_items: studentCount,
-      total_pages: Math.ceil(studentCount / Number(per_page)),
+      total_pages: Math.ceil(studentCount / Number(per_page)) || 1,
       page: Number(page),
       per_page: Number(per_page),
     };
@@ -133,10 +138,15 @@ export const updateStudent = async (req: Request, res: Response, next: NextFunct
   // update student
   const { id } = req.params;
   if (!id) return next(createError(400, 'No student ID provided'));
-  const newUpdate = req.body as Partial<Student>;
+  const { courses, ...newUpdate } = req.body as Partial<Student> & { courses: string[] };
   try {
+    await removeAllStudentCoursesToDb(id);
     const updatedStudent = await updateStudentInDb(id, newUpdate);
-    return createSuccess(res, 200, 'Student updated successfully', { student: updatedStudent });
+    await saveStudentCoursesToDb(courses.map((course_id) => ({ course_id, student_id: id })));
+    const studentCourses = await getStudentCourses(id);
+    return createSuccess(res, 200, 'Student updated successfully', {
+      student: { ...updatedStudent, courses: studentCourses.map((item) => item.course) },
+    });
   } catch (err) {
     return next(err);
   }
@@ -147,6 +157,7 @@ export const deleteStudent = async (req: Request, res: Response, next: NextFunct
   const { id } = req.params;
   if (!id) return next(createError(400, 'No student ID provided'));
   try {
+    await removeAllStudentCoursesToDb(id);
     await removeStudentFromDb(id);
     return createSuccess(res, 200, 'Student deleted successfully', { deleted: true });
   } catch (err) {
