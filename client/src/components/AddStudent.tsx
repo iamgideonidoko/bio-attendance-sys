@@ -28,7 +28,7 @@ const AddStudent: FC<{
   onClose: () => void;
   closeDrawer: () => void;
   activeStudent: Student | null;
-  setActiveStudent: (course: Student | null) => void;
+  setActiveStudent: (student: Student | null) => void;
 }> = ({ onClose, isOpen, size, closeDrawer, activeStudent, setActiveStudent }) => {
   const staffInfo = useStore.use.staffInfo();
   const [studentInput, setStudentInput] = useState<AddStudentInput>({

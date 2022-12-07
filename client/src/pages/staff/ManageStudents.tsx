@@ -99,7 +99,7 @@ const ManageStudents: FC = () => {
             </Thead>
             <Tbody>
               {data.data.students.map((student, idx) => (
-                <Tr>
+                <Tr key={idx}>
                   <Td>{(page - 1) * per_page + (idx + 1)}</Td>
                   <Td>{student.name}</Td>
                   <Td>{student.matric_no}</Td>

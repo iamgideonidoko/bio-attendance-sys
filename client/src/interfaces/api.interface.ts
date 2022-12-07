@@ -120,3 +120,41 @@ export type UpdateStudentInput = AddStudentInput & { id: string; url: string };
 export type UpdateStudentResult = BaseResult<{
   student: Student;
 }>;
+
+/* ATTENDANCE */
+
+export interface Attendance {
+  id: string;
+  staff_id: string;
+  course_id: string;
+  name: string;
+  date: string;
+  course: Omit<Course, 'created_at' | 'staff_id'>;
+  created_at: string;
+}
+
+export interface AddAttendanceInput {
+  staff_id: string;
+  course_id: string;
+  name: string;
+  date: string;
+}
+
+export type AddAttendanceResult = BaseResult<{
+  attendance: Attendance;
+}>;
+
+export type GetAttendancesResult = BaseResult<{
+  attendances: Attendance[];
+  meta: PaginationMeta;
+}>;
+
+export type DeleteAttendanceResult = BaseResult<{
+  deleted: boolean;
+}>;
+
+export type UpdateAttendanceInput = AddAttendanceInput & { id: string; url: string };
+
+export type UpdateAttendanceResult = BaseResult<{
+  attendance: Attendance;
+}>;
