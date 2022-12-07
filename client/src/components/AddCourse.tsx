@@ -96,7 +96,14 @@ const AddCourse: FC<{
   };
 
   return (
-    <Drawer onClose={onClose} isOpen={isOpen} size={size}>
+    <Drawer
+      onClose={() => {
+        setCourseInput((prev) => ({ ...prev, course_name: '', course_code: '' }));
+        onClose();
+      }}
+      isOpen={isOpen}
+      size={size}
+    >
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />

@@ -159,9 +159,15 @@ const ManageCourses: FC = () => {
 
       <AddCourse
         isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
+        onClose={() => {
+          setActiveCourse(null);
+          setDrawerOpen(false);
+        }}
         size="md"
-        closeDrawer={() => setDrawerOpen(false)}
+        closeDrawer={() => {
+          setActiveCourse(null);
+          setDrawerOpen(false);
+        }}
         activeCourse={activeCourse}
         setActiveCourse={(course) => setActiveCourse(course)}
       />
