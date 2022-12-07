@@ -11,10 +11,10 @@ export function useBaseMutation<TRes = unknown, TError = unknown, TData = unknow
     useMutation<TRes, TError, TData, TContext>(
       async (data) =>
         method === 'delete'
-          ? (await axiosClient[method](url + (data as TData & { url?: string })?.url ?? '')).data
+          ? (await axiosClient[method](url + ((data as TData & { url?: string })?.url || ''))).data
           : (
               await axiosClient[method](
-                url + (data as TData & { url?: string })?.url ?? '',
+                url + ((data as TData & { url?: string })?.url || ''),
                 removeObjectProps(data as { [k: string]: unknown }, ['url']),
               )
             ).data,

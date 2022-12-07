@@ -19,11 +19,11 @@ const WithStaffLayout: FC<{ children: ReactNode }> = ({ children }) => {
             <MenuItem as={RouterLink} to="/staff/profile">
               Profile
             </MenuItem>
-            <MenuItem as={RouterLink} to="/staff/manage/students">
-              Manage Students
-            </MenuItem>
             <MenuItem as={RouterLink} to="/staff/manage/courses">
               Manage Courses
+            </MenuItem>
+            <MenuItem as={RouterLink} to="/staff/manage/students">
+              Manage Students
             </MenuItem>
             <MenuItem as={RouterLink} to="/staff/manage/attendance">
               Manage Attendance

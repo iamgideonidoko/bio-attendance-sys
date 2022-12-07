@@ -46,6 +46,7 @@ export type LoginStaffResult = RegisterStaffResult;
 
 export interface Course {
   id: string;
+  staff_id: string;
   course_name: string;
   course_code: string;
   created_at: string;
@@ -80,4 +81,42 @@ export interface UpdateCourseInput {
 
 export type UpdateCourseResult = BaseResult<{
   course: Course;
+}>;
+
+/* STUDENT */
+export interface Student {
+  id: string;
+  staff_id: string;
+  name: string;
+  matric_no: string;
+  fingerprint: string;
+  courses: Course[];
+  created_at: string;
+}
+
+export interface AddStudentInput {
+  staff_id: string;
+  name: string;
+  matric_no: string;
+  fingerprint: string;
+  courses: string[];
+}
+
+export type AddStudentResult = BaseResult<{
+  student: Student;
+}>;
+
+export type GetStudentsResult = BaseResult<{
+  students: Student[];
+  meta: PaginationMeta;
+}>;
+
+export type DeleteStudentResult = BaseResult<{
+  deleted: boolean;
+}>;
+
+export type UpdateStudentInput = AddStudentInput & { id: string; url: string };
+
+export type UpdateStudentResult = BaseResult<{
+  student: Student;
 }>;
