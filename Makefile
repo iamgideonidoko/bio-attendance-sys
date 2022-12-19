@@ -25,6 +25,6 @@ dev-migrate:
 	npm --prefix ./server run migrate:dev
 
 core-server-env:
-	cp ./server/.env.example ./server/.env.test
+	cp ./server/.env.example ./server/.env
 
 .PHONY: conda-env client-deps server-deps match-server-deps client-server core-server match-server dev-migrate
