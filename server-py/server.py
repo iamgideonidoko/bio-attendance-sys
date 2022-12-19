@@ -9,6 +9,7 @@ from flask import (
 )
 from werkzeug.utils import secure_filename
 import cv2
+from flask_cors import CORS
 
 UPLOAD_FOLDER = 'fingerprints'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'BMP'}
@@ -60,6 +61,7 @@ def store_fingerprint_images(app, file, idx):
 def create_app(test_config=None ):
     # create and configure the app
     app = Flask(__name__)
+    CORS(app)
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     app.config['SECRET_KEY'] = 'dev'
 
@@ -74,6 +76,7 @@ def create_app(test_config=None ):
     def verify_fingerprint():
         if request.method == 'POST':
             app.logger.info(request.files.getlist('file'))
+            app.logger.info(request.files.get('file'))
             # check if the post request has the file part
             if 'file' not in request.files:
                 flash('No file part')
@@ -95,6 +98,8 @@ def create_app(test_config=None ):
                 "message": "Verification completed successfully",
                 "match_score": match_score
             })
+        else:
+            return jsonify({ "status": "success" })
      
     return app # do not forget to return the app
 

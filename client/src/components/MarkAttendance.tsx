@@ -12,6 +12,7 @@ import {
   Text,
   Button,
   Box,
+  Image,
 } from '@chakra-ui/react';
 import Select from 'react-select';
 import { InfoIcon } from '@chakra-ui/icons';
@@ -23,6 +24,11 @@ import useStore from '../store/store';
 import SimpleReactValidator from 'simple-react-validator';
 import { toast } from 'react-hot-toast';
 import { removeObjectProps } from '../../../server/src/helpers/general.helper';
+import { fingerprintControl } from '../lib/fingerprint';
+import { Base64 } from '@digitalpersona/core';
+import { getFingerprintImgString } from './AddStudent';
+import axios from 'axios';
+import constants from '../config/constants.config';
 
 const MarkAttendance: FC<{
   isOpen: boolean;
@@ -37,9 +43,13 @@ const MarkAttendance: FC<{
   const [markInput, setMarkInput] = useState<MarkAttendanceInput & { fingerprintMatch: boolean }>({
     student_id: '',
     attendance_id: '',
-    fingerprintMatch: true,
+    fingerprintMatch: false,
   });
-  console.log('markInput => ', markInput);
+  const [deviceConnected, setDeviceConnected] = useState<boolean>(false);
+  const [fingerprints, setFingerprints] = useState<{ studentFingerprint: string; newFingerprint: string }>({
+    studentFingerprint: '',
+    newFingerprint: '',
+  });
   const [, forceUpdate] = useState<boolean>(false);
   const { data: studentData } = useGetStudents(
     staffInfo?.id as string,
@@ -50,7 +60,10 @@ const MarkAttendance: FC<{
     keepPreviousData: true,
   });
 
-  const defaultMarkInput = () => setMarkInput((prev) => ({ ...prev, student_id: '', fingerprintMatch: true }));
+  const defaultMarkInput = () => {
+    setMarkInput((prev) => ({ ...prev, student_id: '', fingerprintMatch: true }));
+    setFingerprints((prev) => ({ ...prev, newFingerprint: '', studentFingerprint: '' }));
+  };
 
   const { isLoading, mutate: markAttendance } = useMarkAttendance({
     onSuccess: () => {
@@ -63,6 +76,47 @@ const MarkAttendance: FC<{
     },
   });
 
+  const dataURLtoFile = (dataurl: string, filename: string) => {
+    const arr = dataurl.split(',');
+    const mime = arr?.[0]?.match(/:(.*?);/)?.[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n) {
+      u8arr[n - 1] = bstr.charCodeAt(n - 1);
+      n -= 1; // to make eslint happy
+    }
+    return new File([u8arr], filename, { type: mime });
+  };
+
+  const handleFingerprintVerification = async () => {
+    const data = new FormData();
+    data.append('file', dataURLtoFile(getFingerprintImgString(fingerprints.studentFingerprint), 'fingerprint_1.jpeg'));
+    data.append('file', dataURLtoFile(getFingerprintImgString(fingerprints.newFingerprint), 'fingerprint_2.jpeg'));
+    try {
+      const res = await axios.post(`${constants.matchBaseUrl}/verify/fingerprint`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      if (res.data?.match_score > 0.05) {
+        setMarkInput((prev) => ({ ...prev, fingerprintMatch: true }));
+        toast.success('Fingerprint matches');
+      } else {
+        toast.error('Fingerprint does not match');
+      }
+    } catch (err) {
+      toast.error('Could not verify fingerprint');
+      console.error('Err: ', err);
+    }
+  };
+
+  useEffect(() => {
+    if (fingerprints.newFingerprint && fingerprints.studentFingerprint) {
+      handleFingerprintVerification();
+    }
+  }, [fingerprints.newFingerprint, fingerprints.studentFingerprint]);
+
   useEffect(() => {
     if (isOpen && activeAttendance) {
       setMarkInput((prev) => ({
@@ -71,6 +125,31 @@ const MarkAttendance: FC<{
       }));
     }
   }, [isOpen, activeAttendance]);
+
+  const handleDeviceConnected = () => {
+    console.log('Device connected');
+    setDeviceConnected(true);
+  };
+
+  const handleDeviceDisconnected = () => {
+    console.log('Device disconnected.');
+    setDeviceConnected(false);
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSampleAcquired = (event: any) => {
+    console.log('Sample acquired => ', event?.samples);
+    const rawImages = event?.samples.map((sample: string) => Base64.fromBase64Url(sample));
+
+    setFingerprints((prev) => ({ ...prev, newFingerprint: rawImages[0] }));
+  };
+
+  useEffect(() => {
+    fingerprintControl.onDeviceConnected = handleDeviceConnected;
+    fingerprintControl.onDeviceDisconnected = handleDeviceDisconnected;
+    fingerprintControl.onSamplesAcquired = handleSampleAcquired;
+    fingerprintControl.init();
+  }, []);
 
   const simpleValidator = useRef(
     new SimpleReactValidator({
@@ -118,7 +197,14 @@ const MarkAttendance: FC<{
               <Select
                 value={students?.find((student) => student.value === markInput.student_id)}
                 options={students}
-                onChange={(newValue) => setMarkInput((prev) => ({ ...prev, student_id: newValue?.value ?? '' }))}
+                onChange={(newValue) => {
+                  setMarkInput((prev) => ({ ...prev, student_id: newValue?.value ?? '' }));
+                  setFingerprints((prev) => ({
+                    ...prev,
+                    studentFingerprint:
+                      studentData?.data?.students?.find((student) => student.id === newValue?.value)?.fingerprint ?? '',
+                  }));
+                }}
               />
               {simpleValidator.current.message('student', markInput.student_id, 'required|between:2,128')}
             </FormControl>
@@ -128,7 +214,18 @@ const MarkAttendance: FC<{
                 <InfoIcon />
                 <Text fontStyle="italic">Ensure a DigitalPersona scanning device is connected to your PC.</Text>
               </Flex>
-              <Box shadow="xs" h={240} w={240} margin="1rem auto" border="1px solid rgba(0, 0, 0, 0.04)"></Box>
+              {deviceConnected && <Text>NB: Fingerprint scanner is connected</Text>}
+              <Box
+                overflow="hidden"
+                shadow="xs"
+                h={240}
+                w={240}
+                margin="1rem auto"
+                border="1px solid rgba(0, 0, 0, 0.04)"
+              >
+                {fingerprints.newFingerprint && <Image src={getFingerprintImgString(fingerprints.newFingerprint)} />}
+              </Box>
+              {simpleValidator.current.message('fingerprint', fingerprints.newFingerprint, 'required|min:2')}
               {simpleValidator.current.message('fingerprint', markInput.fingerprintMatch, 'required|accepted|boolean')}
             </FormControl>
             <Button

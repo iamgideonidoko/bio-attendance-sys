@@ -53,4 +53,6 @@ class FingerprintControl implements IFingerprintControl {
   };
 }
 
+export const fingerprintControl = new FingerprintControl();
+
 export default FingerprintControl;

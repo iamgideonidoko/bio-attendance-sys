@@ -5,7 +5,7 @@ import { removeObjectProps } from './global.helper';
 
 export function useBaseMutation<TRes = unknown, TError = unknown, TData = unknown, TContext = unknown>(
   url: string,
-  method: 'post' | 'put' | 'delete' = 'post',
+  method: 'post' | 'put' | 'delete' | 'post',
 ) {
   return (useMutationOptions: Omit<UseMutationOptions<TRes, TError, TData, TContext>, 'mutationFn'> = {}) =>
     useMutation<TRes, TError, TData, TContext>(

@@ -42,7 +42,7 @@ model Student {
   staff_id    String
   name        String
   matric_no   String              @unique
-  fingerprint String
+  fingerprint String              @db.LongText
   created_at  DateTime
   courses      StudentCourse[]
   attendances  StudentAttendance[]

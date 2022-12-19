@@ -16,11 +16,17 @@ import {
   Input,
   Button,
   Box,
+  Image,
+  Text,
 } from '@chakra-ui/react';
 import Select from 'react-select';
 import { toast } from 'react-hot-toast';
 import useStore from '../store/store';
 import { queryClient } from '../lib/query-client';
+import { fingerprintControl } from '../lib/fingerprint';
+import { Base64 } from '@digitalpersona/core';
+
+export const getFingerprintImgString = (base64ImageData: string) => `data:image/png;base64,${base64ImageData}`;
 
 const AddStudent: FC<{
   isOpen: boolean;
@@ -35,10 +41,12 @@ const AddStudent: FC<{
     staff_id: staffInfo?.id as string,
     name: '',
     matric_no: '',
-    fingerprint: 'test-fingerprint',
+    fingerprint: '',
     courses: [],
   });
-  console.log('studentInput => ', studentInput);
+
+  const [deviceConnected, setDeviceConnected] = useState<boolean>(false);
+  // console.log('studentInput => ', studentInput);
   const [, forceUpdate] = useState<boolean>(false);
   const [page] = useState<number>(1);
   const [per_page] = useState<number>(500);
@@ -47,12 +55,14 @@ const AddStudent: FC<{
     page,
     per_page,
   )({ queryKey: ['availablecourses', page], keepPreviousData: true });
+  const defaultStudentInput = () =>
+    setStudentInput((prev) => ({ ...prev, name: '', matric_no: '', courses: [], fingerprint: '' }));
   const { isLoading, mutate: addStudent } = useAddStudent({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['students'] });
       closeDrawer();
       toast.success('Course added successfully');
-      setStudentInput((prev) => ({ ...prev, name: '', matric_no: '', courses: [] }));
+      defaultStudentInput();
     },
     onError: (err) => {
       toast.error((err.response?.data?.message as string) ?? 'An error occured');
@@ -64,7 +74,7 @@ const AddStudent: FC<{
       setActiveStudent(null);
       closeDrawer();
       toast.success('Course updated successfully');
-      setStudentInput((prev) => ({ ...prev, name: '', matric_no: '', courses: [] }));
+      defaultStudentInput();
     },
     onError: (err) => {
       toast.error((err.response?.data?.message as string) ?? 'An error occured');
@@ -81,6 +91,31 @@ const AddStudent: FC<{
       }));
     }
   }, [isOpen, activeStudent]);
+
+  const handleDeviceConnected = () => {
+    console.log('Device connected');
+    setDeviceConnected(true);
+  };
+
+  const handleDeviceDisconnected = () => {
+    console.log('Device disconnected.');
+    setDeviceConnected(false);
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSampleAcquired = (event: any) => {
+    console.log('Sample acquired => ', event?.samples);
+    const rawImages = event?.samples.map((sample: string) => Base64.fromBase64Url(sample));
+
+    setStudentInput((prev) => ({ ...prev, fingerprint: rawImages[0] }));
+  };
+
+  useEffect(() => {
+    fingerprintControl.onDeviceConnected = handleDeviceConnected;
+    fingerprintControl.onDeviceDisconnected = handleDeviceDisconnected;
+    fingerprintControl.onSamplesAcquired = handleSampleAcquired;
+    fingerprintControl.init();
+  }, []);
   const simpleValidator = useRef(
     new SimpleReactValidator({
       element: (message: string) => <div className="formErrorMsg">{message}</div>,
@@ -91,6 +126,8 @@ const AddStudent: FC<{
     const { name, value } = e.target;
     setStudentInput((prev) => ({ ...prev, [name]: value }));
   };
+
+  console.log('studentInput => ', studentInput);
 
   const handleAddStudent: FormEventHandler = async (e) => {
     e.preventDefault();
@@ -114,7 +151,7 @@ const AddStudent: FC<{
   return (
     <Drawer
       onClose={() => {
-        setStudentInput((prev) => ({ ...prev, name: '', matric_no: '', courses: [] }));
+        defaultStudentInput();
         onClose();
       }}
       isOpen={isOpen}
@@ -148,8 +185,11 @@ const AddStudent: FC<{
             </FormControl>
             <FormControl marginTop="1rem">
               <FormLabel>Fingerprint</FormLabel>
-              <Box shadow="xs" h={240} w={240} margin="1rem auto 0" border="1px solid rgba(0, 0, 0, 0.04)"></Box>
-              {simpleValidator.current.message('fingerprint', studentInput.fingerprint, 'required|between:2,1000')}
+              {deviceConnected && <Text>NB: Fingerprint scanner is connected</Text>}
+              <Box shadow="xs" h={240} w={240} margin="1rem auto 0" border="1px solid rgba(0, 0, 0, 0.04)">
+                {studentInput.fingerprint && <Image src={getFingerprintImgString(studentInput.fingerprint)} />}
+              </Box>
+              {simpleValidator.current.message('fingerprint', studentInput.fingerprint, 'required|between:2,500000')}
             </FormControl>
             <FormControl marginTop="1rem">
               <FormLabel>Courses</FormLabel>

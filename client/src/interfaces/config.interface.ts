@@ -4,4 +4,5 @@ export interface IEnvConfig {
 }
 export interface IConstants {
   baseUrl: string;
+  matchBaseUrl: string;
 }
