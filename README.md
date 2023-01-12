@@ -110,7 +110,7 @@ Follow the steps below to set up the project locally
 
 ![Screenshot of system 4](./screenshots/bas_screenshot_4.JPG)
 
-![Screenshot of system 5](./screenshots/bas_screenshot_5.JPG)
+![Screenshot of system 5](./screenshots/bas_screenshot_5.jpg)
 
 ![Screenshot of system 6](./screenshots/bas_screenshot_6.JPG)
 
